@@ -7,10 +7,12 @@ import json
 cell_size = game.cell_size
 
 def main():
+    print("\nWelcome to Game of Life\n\nPress l to load from config \nPress space to start the game\nPress s to pause the game \nPress q to quit the game ")
     screen = turtle.Screen()
     xlen, ylen = screen.screensize()
     turtle.title("Game of Life")
     turtle.setworldcoordinates(0, 0, xlen, ylen)
+    
     turtle.hideturtle()
     turtle.speed('fastest')
     turtle.tracer(0, 0)
@@ -21,16 +23,19 @@ def main():
 
     # Load config from JSON
     def load_config():
-        temp = set()
+        temp_state = set()
         with open('config.json') as json_data:
             json_parse = json.load(json_data)
 
         json_data = json_parse["live_cells"]
-        for i in range(len(json_data)):
-            cell = tuple(map(int,json_data[i][1:-1].split(',')))
 
-            if newBoard.is_valid(cell[0], cell[1]):
-                newBoard.toggle_cell(cell[0], cell[1])
+        for i in range(len(json_data)):
+            temp_val = tuple(map(int,json_data[i][1:-1].split(',')))
+            temp_state.add(temp_val)
+
+        for i in temp_state:
+            if newBoard.is_valid(i[0], i[1]):
+                newBoard.toggle_cell(i[0], i[1])
                 newBoard.display_board()
 
     # Set up mouse bindings
@@ -67,11 +72,12 @@ def main():
             turtle.ontimer(perform_step, 25)
 
     # Setting up keybindings
-    turtle.onkey(step_once, 's')
-    turtle.onkey(step_continuous, 'c')
-    turtle.onkey(clear_board, 'e')
+    
+    turtle.onkey(step_continuous, 'space')
+    turtle.onkey(clear_board, 'c')
     turtle.onkey(sys.exit, 'q')
     turtle.onkey(load_config, 'l')
+    turtle.onkey(step_once, 's')
 
     turtle.listen()
     turtle.mainloop()
