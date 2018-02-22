@@ -2,6 +2,7 @@ from main import game
 import sys
 import random
 import turtle
+import json
 
 cell_size = game.cell_size
 
@@ -18,6 +19,20 @@ def main():
     continuous = False
     newBoard = game.newGame(xlen // cell_size, ylen // cell_size)
 
+    # Load config from JSON
+    def load_config():
+        temp = set()
+        with open('config.json') as json_data:
+            json_parse = json.load(json_data)
+
+        json_data = json_parse["live_cells"]
+        for i in range(len(json_data)):
+            cell = tuple(map(int,json_data[i][1:-1].split(',')))
+
+            if newBoard.is_valid(cell[0], cell[1]):
+                newBoard.toggle_cell(cell[0], cell[1])
+                newBoard.display_board()
+
     # Set up mouse bindings
     def toggle(x, y):
         cell_x = x // game.cell_size
@@ -28,11 +43,8 @@ def main():
 
     turtle.onscreenclick(turtle.listen)
     turtle.onscreenclick(toggle)
-
-
     newBoard.display_board()
 
-    # Set up key bindings
     def clear_board():
         newBoard.clear()
         newBoard.display_board()
@@ -50,8 +62,7 @@ def main():
     def perform_step():
         newBoard.step()
         newBoard.display_board()
-        # In continuous mode, we set a timer to display another generation
-        # after 25 millisenconds.
+
         if continuous:
             turtle.ontimer(perform_step, 25)
 
@@ -60,8 +71,8 @@ def main():
     turtle.onkey(step_continuous, 'c')
     turtle.onkey(clear_board, 'e')
     turtle.onkey(sys.exit, 'q')
+    turtle.onkey(load_config, 'l')
 
-    # Enter the Tk main loop
     turtle.listen()
     turtle.mainloop()
 
