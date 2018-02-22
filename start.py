@@ -8,12 +8,14 @@ cell_size = game.cell_size
 def main():
     screen = turtle.Screen()
     xlen, ylen = screen.screensize()
+    turtle.title("Game of Life")
     turtle.setworldcoordinates(0, 0, xlen, ylen)
     turtle.hideturtle()
     turtle.speed('fastest')
     turtle.tracer(0, 0)
     turtle.penup()
 
+    continuous = False
     newBoard = game.newGame(xlen // cell_size, ylen // cell_size)
 
     # Set up mouse bindings
@@ -31,15 +33,10 @@ def main():
     newBoard.display_board()
 
     # Set up key bindings
-    def erase():
+    def clear_board():
         newBoard.clear()
         newBoard.display_board()
-    turtle.onkey(erase, 'e')
 
-    turtle.onkey(sys.exit, 'q')
-
-    # Set up keys for performing generation steps, either one-at-a-time or not.
-    continuous = False
     def step_once():
         nonlocal continuous
         continuous = False
@@ -58,13 +55,15 @@ def main():
         if continuous:
             turtle.ontimer(perform_step, 25)
 
+    # Setting up keybindings
     turtle.onkey(step_once, 's')
     turtle.onkey(step_continuous, 'c')
+    turtle.onkey(clear_board, 'e')
+    turtle.onkey(sys.exit, 'q')
 
     # Enter the Tk main loop
     turtle.listen()
     turtle.mainloop()
-
 
 if __name__ == '__main__':
     main()
