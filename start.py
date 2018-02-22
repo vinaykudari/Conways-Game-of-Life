@@ -51,7 +51,7 @@ def main():
     newBoard.display_board()
 
     def clear_board():
-        newBoard.clear()
+        newBoard.clear_board()
         newBoard.display_board()
 
     def step_once():
