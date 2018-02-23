@@ -1,5 +1,5 @@
 # Conways-Game-of-Life
-Python implementation of the game which was created by John Conway.
+Python implementation of the game which was created by John Conway. Live cell configuration will be loaded from 'config.json' file. One can change the config according to his wish.
 
 ## How to play?
 ```
