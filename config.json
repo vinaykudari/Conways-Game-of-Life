@@ -1,5 +1,5 @@
 {
-    "_comment": "Add the locations here",
+    "_comment": "Add the live cell locations here",
     "live_cells":[
        "(5,5)",
        "(5,4)",
